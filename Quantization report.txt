@@ -1,0 +1,92 @@
+QuantCNN(
+  (quant): Quantize(scale=tensor([0.0079]), zero_point=tensor([0]), dtype=torch.quint8)
+  (conv1): QuantizedConv2d(1, 6, kernel_size=(3, 3), stride=(1, 1), scale=0.046752627938985825, zero_point=57)
+  (relu1): ReLU()
+  (pool1): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (conv2): QuantizedConv2d(6, 16, kernel_size=(3, 3), stride=(1, 1), scale=0.20174522697925568, zero_point=75)
+  (relu2): ReLU()
+  (pool2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (flatten): Flatten(start_dim=1, end_dim=-1)
+  (fc): QuantizedLinear(in_features=400, out_features=10, scale=0.46030887961387634, zero_point=69, qscheme=torch.per_channel_affine)
+  (dequant): DeQuantize()
+)
+
+Input scale: 0.007870171219110489
+Input zp   : 0
+
+===== conv1 =====
+--- Bias (INT32) ---
+[ -32  625 2600 8378 2979 5254]
+
+--- Zw (per-channel INT8) ---
+[0 0 0 0 0 0]
+
+--- Zo (INT8) ---
+57
+
+--- M0, n per channel ---
+Channel 0: M0=1086523253, n=9
+Channel 1: M0=1885069464, n=10
+Channel 2: M0=1385459822, n=9
+Channel 3: M0=1166647221, n=9
+Channel 4: M0=1304869489, n=9
+Channel 5: M0=1662666692, n=10
+
+
+===== conv2 =====
+--- Bias (INT32) ---
+[  22 -242  
+ 21  108 
+ 386 590  
+ 303  -82 
+ 297  297 
+ -232 -151
+ -419 -716.
+ -266  630]
+
+--- Zw (per-channel INT8) ---
+[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+
+--- Zo (INT8) ---
+75
+
+--- M0, n per channel ---
+Channel 0: M0=1551900460, n=9
+Channel 1: M0=1144523593, n=9
+Channel 2: M0=1196926085, n=9
+Channel 3: M0=1578201076, n=9
+Channel 4: M0=1364643341, n=9
+Channel 5: M0=1094120377, n=9
+Channel 6: M0=1268637780, n=9
+Channel 7: M0=1273330442, n=9
+Channel 8: M0=1167884266, n=9
+Channel 9: M0=1267679077, n=9
+Channel 10: M0=1898435994, n=10
+Channel 11: M0=1400639079, n=9
+Channel 12: M0=1089299928, n=9
+Channel 13: M0=1258529990, n=9
+Channel 14: M0=1327363084, n=9
+Channel 15: M0=1436180619, n=9
+
+
+===== fc =====
+--- Bias (INT32) ---
+[133 121 -40 -45 -26  85 -73 -10  20  29]
+
+--- Zw (INT8) ---
+[0 0 0 0 0 0 0 0 0 0]
+
+--- Zo (INT8) ---
+69
+
+--- M0, n ---
+Neuron 0: M0=1798618152, n=9
+Neuron 1: M0=1893381934, n=9
+Neuron 2: M0=2011248985, n=9
+Neuron 3: M0=1997046003, n=9
+Neuron 4: M0=1604336325, n=9
+Neuron 5: M0=1110916924, n=8
+Neuron 6: M0=1812078817, n=9
+Neuron 7: M0=1792013371, n=9
+Neuron 8: M0=1090754087, n=8
+Neuron 9: M0=1092942666, n=8
