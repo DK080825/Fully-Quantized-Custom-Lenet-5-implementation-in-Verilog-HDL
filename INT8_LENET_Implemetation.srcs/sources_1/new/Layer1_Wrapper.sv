@@ -20,26 +20,31 @@ module Layer1_Wrapper #(
 	parameter LAYER_OUTPUT2_WIDTH = 13,
     parameter LAYER_OUTPUT2_HEIGHT = 7,
     parameter CHANNEL_NUM = 1,
-	parameter M0_WIDTH = 32
+	parameter M0_WIDTH = 32,
+	parameter string WEIGHT_MEMFILE_ALL = "layer1_weights_lutram.mem"
 	)
 	(
     input logic clk, reset, run,
-    input logic signed [DATA_WIDTH-1:0] fm_data_in0 [CHANNEL_NUM],
-	input logic signed [DATA_WIDTH-1:0] fm_data_in1 [CHANNEL_NUM],
+    input logic  [DATA_WIDTH-1:0] fm_data_in0 [CHANNEL_NUM],
+	input logic  [DATA_WIDTH-1:0] fm_data_in1 [CHANNEL_NUM],
     input logic [ADDR_WIDTH-1:0] result_read_addr,
     
     output logic [ADDR_WIDTH-1:0] fm_data_read_addr0,
 	output logic [ADDR_WIDTH-1:0] fm_data_read_addr1,
 	
-    output logic signed [DATA_WIDTH-1:0] result_out[12],
+    output logic  [DATA_WIDTH-1:0] result_out[12],
     output logic done
 	);
+	
+	localparam int FILTER_NUM      = 6;
+    localparam int WEIGHT_WORD_W   = DATA_WIDTH * CHANNEL_NUM;  // 8            
+    localparam int ALL_WEIGHT_W    = FILTER_NUM * WEIGHT_WORD_W; // 48            
 
 	logic is_last_fm_addr0, is_last_fm_addr1;
 	logic update_fm_begin_addr0, update_fm_begin_addr1;
 	logic fm_gen_addr_en0, fm_gen_addr_en1;
 	
-	logic signed [DATA_WIDTH-1:0] layer_result_op[12];
+	logic  [DATA_WIDTH-1:0] layer_result_op[12];
 	logic signed [(DATA_WIDTH*6)-1:0] weight_data_in; // 6 filters ( 6 * 8 = 48 bits)
 	
 	logic signed [DATA_WIDTH-1:0] weight_data_in_F0 [CHANNEL_NUM];
@@ -148,8 +153,20 @@ module Layer1_Wrapper #(
     .done       ()
  );
  
- Layer1_weights Layer1_weights_inst (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in));
+
  
+ lutrom_sync #(
+    .WIDTH  (ALL_WEIGHT_W),
+    .DEPTH  (CONV_KERNEL_WIDTH*CONV_KERNEL_HEIGHT),
+    .ADDR_W (ADDR_WIDTH),
+    .MEMFILE(WEIGHT_MEMFILE_ALL)
+) weight_rom_all (
+    .clk (clk),
+    .en  (1'b1),
+    .addr(weight_read_addr),
+    .q   (weight_data_in)
+);
+
  assign weight_data_in_F0[0] = weight_data_in [7:0];
  assign weight_data_in_F1[0] = weight_data_in [15:8];
  assign weight_data_in_F2[0] = weight_data_in [23:16];

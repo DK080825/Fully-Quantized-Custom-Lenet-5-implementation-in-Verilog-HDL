@@ -44,7 +44,7 @@ input logic start_in,
 input logic reset_in,
 input logic [ADDR_WIDTH-1:0] mnist_waddr,
 input logic mnist_wren,
-input logic signed [DATA_WIDTH-1:0] mnist_wdata,
+input logic  [DATA_WIDTH-1:0] mnist_wdata,
 output logic [3:0] classification, 
 output logic done
    );
@@ -86,16 +86,16 @@ assign run = !start_0 && start;
 logic we_a, we_b;
 logic [ADDR_WIDTH-1:0] waddr_a, waddr_b; 
 logic [ADDR_WIDTH-1:0] input_mem_read_addr0, input_mem_read_addr1;
-logic signed [DATA_WIDTH-1:0] input_data_in0[1];
-logic signed [DATA_WIDTH-1:0] input_data_in1[1];
-logic signed [DATA_WIDTH-1:0] l1_output [12];
+logic  [DATA_WIDTH-1:0] input_data_in0[1];
+logic  [DATA_WIDTH-1:0] input_data_in1[1];
+logic  [DATA_WIDTH-1:0] l1_output [12];
 logic  [ADDR_WIDTH-1:0] l1_read_addr;
 logic  [ADDR_WIDTH-1:0] l2_read_addr;
-logic signed [DATA_WIDTH-1:0] l2_data_in [6];
-logic signed [DATA_WIDTH-1:0] l2_output [16];
+logic  [DATA_WIDTH-1:0] l2_data_in [6];
+logic  [DATA_WIDTH-1:0] l2_output [16];
 
 logic [ADDR_WIDTH-1:0] mlp_read_addr;
-logic signed [DATA_WIDTH-1:0] mlp_data_in [16];
+logic  [DATA_WIDTH-1:0] mlp_data_in [16];
 logic l1_done,l2_done;
 
 
@@ -178,12 +178,12 @@ Layer1_Wrapper #(
 
 
 
-logic signed [DATA_WIDTH-1:0] l1_bank1_out [2];
-logic signed [DATA_WIDTH-1:0] l1_bank2_out [2];
-logic signed [DATA_WIDTH-1:0] l1_bank3_out [2];
-logic signed [DATA_WIDTH-1:0] l1_bank4_out [2];
-logic signed [DATA_WIDTH-1:0] l1_bank5_out [2];
-logic signed [DATA_WIDTH-1:0] l1_bank6_out [2];
+logic  [DATA_WIDTH-1:0] l1_bank1_out [2];
+logic  [DATA_WIDTH-1:0] l1_bank2_out [2];
+logic  [DATA_WIDTH-1:0] l1_bank3_out [2];
+logic  [DATA_WIDTH-1:0] l1_bank4_out [2];
+logic  [DATA_WIDTH-1:0] l1_bank5_out [2];
+logic  [DATA_WIDTH-1:0] l1_bank6_out [2];
 
 assign l1_bank1_out[0] = l1_output[0];
 assign l1_bank1_out[1] = l1_output[1];
@@ -251,10 +251,10 @@ Layer2_Wrapper #(
 );
 
 
-logic signed[DATA_WIDTH-1:0] l2_bank1_out [4];
-logic signed[DATA_WIDTH-1:0] l2_bank2_out [4];
-logic signed[DATA_WIDTH-1:0] l2_bank3_out [4];
-logic signed[DATA_WIDTH-1:0] l2_bank4_out [4];
+logic [DATA_WIDTH-1:0] l2_bank1_out [4];
+logic [DATA_WIDTH-1:0] l2_bank2_out [4];
+logic [DATA_WIDTH-1:0] l2_bank3_out [4];
+logic [DATA_WIDTH-1:0] l2_bank4_out [4];
 
 assign l2_bank1_out[0] = l2_output[0];
 assign l2_bank1_out[1] = l2_output[1];
@@ -280,7 +280,7 @@ logic dense_run;
 assign dense_run = l2_done;
 
 
-Dense_Wrapper#(
+Dense_Wrapper #(
 .DATA_WIDTH(DATA_WIDTH),
 .VEC_SIZE(MLP_VEC_SIZE),
 .ADDR_WIDTH(ADDR_WIDTH),

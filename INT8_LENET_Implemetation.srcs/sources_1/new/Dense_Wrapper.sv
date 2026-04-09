@@ -15,32 +15,32 @@ module Dense_Wrapper#(
 (
 input logic clk, reset, run,
 
-input logic signed [DATA_WIDTH-1:0] q_data_b0_in[4],
-input logic signed [DATA_WIDTH-1:0] q_data_b1_in[4],
-input logic signed [DATA_WIDTH-1:0] q_data_b2_in[4],
-input logic signed [DATA_WIDTH-1:0] q_data_b3_in[4],
+input logic  [DATA_WIDTH-1:0] q_data_b0_in[4],
+input logic  [DATA_WIDTH-1:0] q_data_b1_in[4],
+input logic  [DATA_WIDTH-1:0] q_data_b2_in[4],
+input logic  [DATA_WIDTH-1:0] q_data_b3_in[4],
 
 output logic [ADDR_WIDTH-1:0] local_fm_addr,
 output logic [3:0] classification,
-output logic signed [DATA_WIDTH-1:0] result [10],
+output logic  [DATA_WIDTH-1:0] result [10],
 output logic done
     );
 
 logic [ADDR_WIDTH-1:0] mlp_addr_out;
-logic signed [DATA_WIDTH-1:0] mlp_data_in[MAC_NUM];
+logic  [DATA_WIDTH-1:0] mlp_data_in[MAC_NUM];
 logic signed [(DATA_WIDTH*10)-1:0] weight_data_in [MAC_NUM]; // 10 neuron (10 x 8 = 80bit width)
 logic signed [DATA_WIDTH-1:0] q_weight_in [10][MAC_NUM];
 
-logic signed [DATA_WIDTH-1:0] mlp_result_out0;
-logic signed [DATA_WIDTH-1:0] mlp_result_out1;
-logic signed [DATA_WIDTH-1:0] mlp_result_out2;
-logic signed [DATA_WIDTH-1:0] mlp_result_out3;
-logic signed [DATA_WIDTH-1:0] mlp_result_out4;
-logic signed [DATA_WIDTH-1:0] mlp_result_out5;
-logic signed [DATA_WIDTH-1:0] mlp_result_out6;
-logic signed [DATA_WIDTH-1:0] mlp_result_out7;
-logic signed [DATA_WIDTH-1:0] mlp_result_out8;
-logic signed [DATA_WIDTH-1:0] mlp_result_out9;
+logic  [DATA_WIDTH-1:0] mlp_result_out0;
+logic  [DATA_WIDTH-1:0] mlp_result_out1;
+logic  [DATA_WIDTH-1:0] mlp_result_out2;
+logic  [DATA_WIDTH-1:0] mlp_result_out3;
+logic  [DATA_WIDTH-1:0] mlp_result_out4;
+logic  [DATA_WIDTH-1:0] mlp_result_out5;
+logic  [DATA_WIDTH-1:0] mlp_result_out6;
+logic  [DATA_WIDTH-1:0] mlp_result_out7;
+logic  [DATA_WIDTH-1:0] mlp_result_out8;
+logic  [DATA_WIDTH-1:0] mlp_result_out9;
 
 logic mlp_done;
 
@@ -51,10 +51,10 @@ always_ff @(posedge clk) begin
     else done <= mlp_done;
 end 
 
-FC_BANK_0 FC_BANK_0_inst0 (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(mlp_addr_out), .dina('0), .douta(weight_data_in[0]));
-FC_BANK_1 FC_BANK_1_inst1 (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(mlp_addr_out), .dina('0), .douta(weight_data_in[1]));
-FC_BANK_2 FC_BANK_2_inst2 (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(mlp_addr_out), .dina('0), .douta(weight_data_in[2]));
-FC_BANK_3 FC_BANK_3_inst3 (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(mlp_addr_out), .dina('0), .douta(weight_data_in[3]));
+FC_BANK0 FC_BANK_0_inst0 (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(mlp_addr_out), .dina('0), .douta(weight_data_in[0]),
+                          .clkb(clk), .enb(1'b1), .web(1'b0), .addrb(mlp_addr_out + 'd100), .dinb('0), .doutb(weight_data_in[1]));
+FC_BANK1 FC_BANK_1_inst0 (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(mlp_addr_out), .dina('0), .douta(weight_data_in[2]),
+                          .clkb(clk), .enb(1'b1), .web(1'b0), .addrb(mlp_addr_out + 'd100), .dinb('0), .doutb(weight_data_in[3]));
 
 genvar i, j;
 generate

@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module Layer2_Wrapper
 #(
     parameter DATA_WIDTH = 8,
@@ -15,104 +13,124 @@ module Layer2_Wrapper
     parameter LAYER_OUTPUT_WIDTH = 5,
     parameter LAYER_OUTPUT_HEIGHT = 5,
     parameter CHANNEL_NUM = 6,
-	parameter M0_WIDTH = 32
+    parameter M0_WIDTH = 32,
+    parameter string WEIGHT_MEMFILE_ALL = "layer2_weights_lutram.mem"
 )(
     input logic clk, reset, run,
-    input logic signed [DATA_WIDTH-1:0] fm_data_in [6],
+    input logic  [DATA_WIDTH-1:0] fm_data_in [6],
     input logic [ADDR_WIDTH-1:0] result_read_addr,
-    
+
     output logic [ADDR_WIDTH-1:0] fm_data_read_addr,
-    output logic signed [DATA_WIDTH-1:0] result_out[16],
+    output logic  [DATA_WIDTH-1:0] result_out[16],
     output logic done
 );
+
+localparam int FILTER_NUM      = 16;
+localparam int KERNEL_TAP_NUM  = CONV_KERNEL_WIDTH * CONV_KERNEL_HEIGHT; // 9
+localparam int WEIGHT_ADDR_W   = (KERNEL_TAP_NUM <= 2) ? 1 : $clog2(KERNEL_TAP_NUM);
+localparam int WEIGHT_WORD_W   = DATA_WIDTH * CHANNEL_NUM;               // 48
+localparam int ALL_WEIGHT_W    = FILTER_NUM * WEIGHT_WORD_W;             // 768
 
 logic is_last_fm_addr;
 logic update_fm_begin_addr;
 logic fm_gen_addr_en;
-logic signed [DATA_WIDTH-1:0] layer_result_op[16];
-logic signed [(DATA_WIDTH*6)-1:0] weight_data_in [16]; // 16 filters X 6 channels x 8bit data ==> 
-logic signed [DATA_WIDTH-1:0] weight_data_in_F [16][6];
-logic [ADDR_WIDTH-1:0] weight_read_addr;
+logic  [DATA_WIDTH-1:0] layer_result_op[16];
+
+// Same external organization as your old wrapper
+logic signed [WEIGHT_WORD_W-1:0] weight_data_in [16];
+logic signed [DATA_WIDTH-1:0]    weight_data_in_F [16][6];
+logic [ADDR_WIDTH-1:0]           weight_read_addr;
+
+// Only used in solution 2
+logic [ALL_WEIGHT_W-1:0] weight_word_all_q;
 
 generate
-    genvar i;
-    for (i = 0; i < 16; i++) begin
-        assign result_out[i] = layer_result_op[i];
+    genvar gi;
+    for (gi = 0; gi < 16; gi++) begin
+        assign result_out[gi] = layer_result_op[gi];
     end
 endgenerate
-
 
 logic [ADDR_WIDTH-1:0] column_count;
 logic [ADDR_WIDTH-1:0] row_count;
 
-assign is_last_fm_addr = (column_count == CONV_FM_WIDTH - CONV_KERNEL_WIDTH) && (row_count == CONV_FM_HEIGHT - CONV_KERNEL_HEIGHT);
-	
-always@(posedge clk) begin
-	if (reset) begin
-	  column_count <= 'b0;
-	  row_count <= 'b0;
-	end
-	else if (update_fm_begin_addr) begin
-	  column_count <= (column_count < CONV_FM_WIDTH - CONV_KERNEL_WIDTH) ? column_count + 'b1 : 'b0;
-	  row_count <= is_last_fm_addr ? 'b0 : (column_count == CONV_FM_WIDTH - CONV_KERNEL_WIDTH) ? row_count + 'b1 : row_count;
+assign is_last_fm_addr =
+    (column_count == CONV_FM_WIDTH  - CONV_KERNEL_WIDTH) &&
+    (row_count    == CONV_FM_HEIGHT - CONV_KERNEL_HEIGHT);
+
+always_ff @(posedge clk) begin
+    if (reset) begin
+        column_count <= '0;
+        row_count    <= '0;
+    end
+    else if (update_fm_begin_addr) begin
+        column_count <= (column_count < CONV_FM_WIDTH - CONV_KERNEL_WIDTH) ? column_count + 1'b1 : '0;
+        row_count    <= is_last_fm_addr ? '0 :
+                        (column_count == CONV_FM_WIDTH - CONV_KERNEL_WIDTH) ? row_count + 1'b1 : row_count;
     end
 end
 
-logic [ADDR_WIDTH-1:0] fm_begin_addr = 'd0 ;
+logic [ADDR_WIDTH-1:0] fm_begin_addr;
 
-always@(posedge clk) begin
-	if (reset) begin
-	  fm_begin_addr <= 'b0;
+always_ff @(posedge clk) begin
+    if (reset) begin
+        fm_begin_addr <= '0;
     end
-	else if (update_fm_begin_addr) begin
-	  fm_begin_addr <= is_last_fm_addr ? 'b0 : (column_count == CONV_FM_WIDTH - CONV_KERNEL_WIDTH) ? fm_begin_addr + CONV_KERNEL_WIDTH : fm_begin_addr + 'd1;
+    else if (update_fm_begin_addr) begin
+        fm_begin_addr <= is_last_fm_addr ? '0 :
+                         (column_count == CONV_FM_WIDTH - CONV_KERNEL_WIDTH) ? fm_begin_addr + CONV_KERNEL_WIDTH :
+                                                                              fm_begin_addr + 1'b1;
     end
 end
 
+read_address_gen #(
+    .ARRAY_HEIGHT     (CONV_FM_HEIGHT),
+    .ARRAY_WIDTH      (CONV_FM_WIDTH),
+    .PARTITION_SIZE   (CONV_KERNEL_WIDTH),
+    .PARTITION_HEIGHT (CONV_KERNEL_HEIGHT)
+) fm_addr_gen (
+    .clk       (clk),
+    .run       (fm_gen_addr_en),
+    .begin_addr(fm_begin_addr),
+    .addr_out  (fm_data_read_addr),
+    .wr_addr   (),
+    .done      ()
+);
 
 
- read_address_gen #(
-    .ARRAY_HEIGHT  (CONV_FM_HEIGHT),
-    .ARRAY_WIDTH   (CONV_FM_WIDTH),
-    .PARTITION_SIZE(CONV_KERNEL_WIDTH),
-    .PARTITION_HEIGHT(CONV_KERNEL_HEIGHT)
-  ) dut (
-    .clk        (clk),
-    .run        (fm_gen_addr_en),
-    .begin_addr (fm_begin_addr),
-    .addr_out   (fm_data_read_addr),
-    .wr_addr    (),
-    .done       ()
- );
 
- Layer2_F0 Layer2_weights_inst0    (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[0]));
- Layer2_F1 Layer2_weights_inst1    (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[1]));
- Layer2_F2 Layer2_weights_inst2    (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[2]));
- Layer2_F3 Layer2_weights_inst3    (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[3]));
- Layer2_F4 Layer2_weights_inst4    (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[4]));
- Layer2_F5 Layer2_weights_inst5    (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[5]));
- Layer2_F6 Layer2_weights_inst6    (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[6]));
- Layer2_F7 Layer2_weights_inst7    (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[7]));
- Layer2_F8 Layer2_weights_inst8    (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[8]));
- Layer2_F9 Layer2_weights_inst9    (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[9]));
- Layer2_F10 Layer2_weights_inst10 (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[10]));
- Layer2_F11 Layer2_weights_inst11 (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[11]));
- Layer2_F12 Layer2_weights_inst12 (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[12]));
- Layer2_F13 Layer2_weights_inst13 (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[13]));
- Layer2_F14 Layer2_weights_inst14 (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[14]));
- Layer2_F15 Layer2_weights_inst15 (.clka(clk), .ena(1'b1), .wea(1'b0), .addra(weight_read_addr), .dina('0), .douta(weight_data_in[15]));
- 
+lutrom_sync #(
+    .WIDTH  (ALL_WEIGHT_W),
+    .DEPTH  (KERNEL_TAP_NUM),
+    .ADDR_W (WEIGHT_ADDR_W),
+    .MEMFILE(WEIGHT_MEMFILE_ALL)
+) weight_rom_all (
+    .clk (clk),
+    .en  (1'b1),
+    .addr(weight_read_addr[WEIGHT_ADDR_W-1:0]),
+    .q   (weight_word_all_q)
+);
+
+genvar gf;
 generate
-    genvar j;
-    for (i = 0; i < 16; i++) begin : FILTER_LOOP
-        for (j = 0; j < 6; j++) begin : CHANNEL_LOOP
-            assign weight_data_in_F[i][j] = weight_data_in [i] [j*DATA_WIDTH +: DATA_WIDTH];
-        end
+    for (gf = 0; gf < FILTER_NUM; gf++) begin : GEN_WIDE_SLICE
+        assign weight_data_in[gf] =
+            weight_word_all_q[gf*WEIGHT_WORD_W +: WEIGHT_WORD_W];
     end
 endgenerate
 
+genvar gfi, gc;
+generate
+    for (gfi = 0; gfi < FILTER_NUM; gfi++) begin : GEN_FILTER_CH_SPLIT
+        for (gc = 0; gc < CHANNEL_NUM; gc++) begin : GEN_CH_SPLIT
+            assign weight_data_in_F[gfi][gc] =
+                weight_data_in[gfi][gc*DATA_WIDTH +: DATA_WIDTH];
+        end
+    end
+endgenerate
+    
 // Instances are written explicitly instead of using a generate-for loop,
-// because each L2_Fx_process_unit is bound to a unique weight set.
+// because each L2_Fx_process_unit is bound to a unique quantization set.
 
 L2_F0_process_unit #(
 .DATA_WIDTH(DATA_WIDTH) ,
@@ -577,6 +595,5 @@ L2_F15_process_unit #(
 .weight_data_in(weight_data_in_F[15]),
 .weight_read_addr()
 );
-
 
 endmodule
