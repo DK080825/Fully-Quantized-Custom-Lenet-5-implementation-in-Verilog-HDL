@@ -12,10 +12,10 @@ module MAC_wrapper #(
     input logic reset,
     input logic run,
     input logic signed [DATA_WIDTH-1:0] q_weight_in [CHANNEL_PAR],
-    input logic signed [DATA_WIDTH-1:0] q_data_in [CHANNEL_PAR],
+    input logic          [DATA_WIDTH-1:0] q_data_in [CHANNEL_PAR], // unsigned
 	input logic signed [DATA_WIDTH-1:0] Z_weight_in,
-	input logic signed [DATA_WIDTH-1:0] Z_data_in,
-	input logic signed [DATA_WIDTH-1:0] Zo_in,
+	input logic         [DATA_WIDTH-1:0] Z_data_in,
+	input logic         [DATA_WIDTH-1:0] Zo_in,
 	input logic signed [M0_WIDTH-1:0] 	M0_in,
     input logic signed [31:0] 			bias_in,
 	input logic 	   [5:0]        	n_in,
@@ -25,7 +25,7 @@ module MAC_wrapper #(
     
     output logic [ADDR_WIDTH-1:0] wt_read_addr_out,
     output logic fm_gen_addr_en,
-    output logic signed [DATA_WIDTH-1:0] q_out,
+    output logic     [DATA_WIDTH-1:0] q_out, // unsigned
     output logic [ADDR_WIDTH-1:0] wr_addr_out,
     output logic we_out,
     output logic done,

@@ -14,20 +14,20 @@ module mlp_top #(
     )
 (
     input logic clk, rst, start,
-    input logic signed [DATA_WIDTH-1 :0] q_data_in[MAC_NUM],
+    input logic        [DATA_WIDTH-1 :0] q_data_in[MAC_NUM], // unsinged
     input logic signed [DATA_WIDTH-1 :0] q_weight_in [10][MAC_NUM],
     
-    output logic [ADDR_WIDTH -1: 0] address_out,
-    output logic signed [DATA_WIDTH-1:0] result_out0,
-    output logic signed [DATA_WIDTH-1:0] result_out1,
-    output logic signed [DATA_WIDTH-1:0] result_out2,
-    output logic signed [DATA_WIDTH-1:0] result_out3,
-    output logic signed [DATA_WIDTH-1:0] result_out4,
-    output logic signed [DATA_WIDTH-1:0] result_out5,
-    output logic signed [DATA_WIDTH-1:0] result_out6,
-    output logic signed [DATA_WIDTH-1:0] result_out7,
-    output logic signed [DATA_WIDTH-1:0] result_out8,
-    output logic signed [DATA_WIDTH-1:0] result_out9,
+    output logic  [ADDR_WIDTH -1: 0] address_out,
+    output logic  [DATA_WIDTH-1:0] result_out0,
+    output logic  [DATA_WIDTH-1:0] result_out1,
+    output logic  [DATA_WIDTH-1:0] result_out2,
+    output logic  [DATA_WIDTH-1:0] result_out3,
+    output logic  [DATA_WIDTH-1:0] result_out4,
+    output logic  [DATA_WIDTH-1:0] result_out5,
+    output logic  [DATA_WIDTH-1:0] result_out6,
+    output logic  [DATA_WIDTH-1:0] result_out7,
+    output logic  [DATA_WIDTH-1:0] result_out8,
+    output logic  [DATA_WIDTH-1:0] result_out9,
     output logic done
 );
 
@@ -49,9 +49,9 @@ logic  [PE_NUM-1:0] single_PE_done;
 assign all_PE_done = &(single_PE_done);
 
 logic [1:0] state_reg, state_next;
-logic signed [DATA_WIDTH-1:0] vec_dot_out [PE_NUM-1:0];
-logic signed[DATA_WIDTH-1:0]  vec_dot_next [PE_NUM-1:0];
-logic signed [DATA_WIDTH-1:0] vec_dot_reg [PE_NUM-1:0];
+logic  [DATA_WIDTH-1:0] vec_dot_out [PE_NUM-1:0];
+logic [DATA_WIDTH-1:0]  vec_dot_next [PE_NUM-1:0];
+logic  [DATA_WIDTH-1:0] vec_dot_reg [PE_NUM-1:0];
 
 // clear and last signals logic for INT8 MAC 
 logic clr_acc, last_acc;

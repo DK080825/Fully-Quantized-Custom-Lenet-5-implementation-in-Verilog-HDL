@@ -18,7 +18,7 @@ module L2_F8_process_unit #(
     )
 (
     input logic clk, reset, run,
-    input logic signed [DATA_WIDTH-1:0] fm_data_in [6],
+    input logic  [DATA_WIDTH-1:0] fm_data_in [6],
     input logic signed [DATA_WIDTH-1:0] weight_data_in [6],
     input logic [ADDR_WIDTH-1:0] result_read_addr,
     
@@ -26,11 +26,11 @@ module L2_F8_process_unit #(
     output logic update_fm_begin_addr,
     output logic [ADDR_WIDTH-1:0] weight_read_addr,
     output logic fm_gen_addr_en,
-    output logic signed [DATA_WIDTH-1:0] result_out,
+    output logic  [DATA_WIDTH-1:0] result_out,
     output logic done
 );
 
-logic signed [DATA_WIDTH-1:0] maxrelu_result;
+logic  [DATA_WIDTH-1:0] maxrelu_result;
 logic [ADDR_WIDTH-1:0] maxrelu_wr_addr;
 logic maxrelu_we;
 

@@ -18,8 +18,8 @@ module L1_F2_0_process_unit #(
     )
 	(
     input logic clk, reset, run,
-    input logic signed [DATA_WIDTH-1:0] fm_data_in [CHANNEL_NUM],
-	input signed [DATA_WIDTH-1:0] weight_data_in[CHANNEL_NUM],
+    input logic  [DATA_WIDTH-1:0] fm_data_in [CHANNEL_NUM],
+	input logic signed [DATA_WIDTH-1:0] weight_data_in[CHANNEL_NUM],
     
     input logic [ADDR_WIDTH-1:0] result_read_addr,
     
@@ -27,16 +27,16 @@ module L1_F2_0_process_unit #(
     output logic update_fm_begin_addr,
     
     output logic fm_gen_addr_en,
-    output logic signed [DATA_WIDTH-1:0] result_out,
+    output logic  [DATA_WIDTH-1:0] result_out,
     output logic done,
 	output logic [ADDR_WIDTH-1:0] weight_read_addr,
     // for testing
     
-    output logic signed [DATA_WIDTH-1:0] conv_result,
+    output logic  [DATA_WIDTH-1:0] conv_result,
     output logic conv_we
 	);
 
-	logic signed [DATA_WIDTH-1:0] maxrelu_result;
+	logic  [DATA_WIDTH-1:0] maxrelu_result;
 	logic [ADDR_WIDTH-1:0] maxrelu_wr_addr;
 	logic maxrelu_we;
 

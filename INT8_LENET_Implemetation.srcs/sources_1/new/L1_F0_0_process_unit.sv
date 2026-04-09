@@ -18,8 +18,8 @@ module L1_F0_0_process_unit #(
     )
 	(
     input logic clk, reset, run,
-    input logic signed [DATA_WIDTH-1:0] fm_data_in [CHANNEL_NUM],
-	input signed [DATA_WIDTH-1:0] weight_data_in[CHANNEL_NUM],
+    input logic  [DATA_WIDTH-1:0] fm_data_in [CHANNEL_NUM], //unsigned
+	input logic signed [DATA_WIDTH-1:0] weight_data_in[CHANNEL_NUM],
     
     input logic [ADDR_WIDTH-1:0] result_read_addr,
     
@@ -27,19 +27,19 @@ module L1_F0_0_process_unit #(
     output logic update_fm_begin_addr,
     
     output logic fm_gen_addr_en,
-    output logic signed [DATA_WIDTH-1:0] result_out,
+    output logic   [DATA_WIDTH-1:0] result_out, // unsigned
     output logic done,
 	output logic [ADDR_WIDTH-1:0] weight_read_addr,
      // for testing
-     output logic signed [DATA_WIDTH-1: 0] conv_result,
+     output logic  [DATA_WIDTH-1: 0] conv_result,
      output logic conv_we,
      output logic [ADDR_WIDTH-1:0] conv_waddr,
      output logic conv_done_o,
-     output logic signed [DATA_WIDTH-1:0] test_maxrelu_data_in,
+     output logic  [DATA_WIDTH-1:0] test_maxrelu_data_in,
      output logic [ADDR_WIDTH-1:0] test_maxrelu_raddr
 	);
 
-	logic signed [DATA_WIDTH-1:0] maxrelu_result;
+	logic  [DATA_WIDTH-1:0] maxrelu_result; // unsigned
 	logic [ADDR_WIDTH-1:0] maxrelu_wr_addr;
 	logic maxrelu_we;
 	
@@ -68,11 +68,11 @@ module L1_F0_0_process_unit #(
 	 .wr_en_out(maxrelu_we),
 	 .done(done),
      .conv_result(conv_result),
-     .conv_we(conv_we),
-     .conv_done_o (conv_done_o),
-     .test_maxrelu_data_in(test_maxrelu_data_in),
-     .test_maxrelu_raddr(test_maxrelu_raddr),
-     .conv_waddr(conv_waddr)
+     .conv_we(conv_we)
+     //.conv_done_o (conv_done_o),
+     //.test_maxrelu_data_in(test_maxrelu_data_in),
+     //.test_maxrelu_raddr(test_maxrelu_raddr),
+     //.conv_waddr(conv_waddr)
 	);
 
 	

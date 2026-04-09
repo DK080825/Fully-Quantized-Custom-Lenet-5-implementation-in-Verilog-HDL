@@ -10,11 +10,11 @@ module dual_mem_mux
     input  logic clk,
     input  logic reset,
 
-    input  logic [ADDR_WIDTH-1:0] read_addr_in,
-    input  logic signed [DATA_WIDTH-1:0] fm_data_in[NUM_MEM],
+    input  logic  [ADDR_WIDTH-1:0] read_addr_in,
+    input  logic  [DATA_WIDTH-1:0] fm_data_in[NUM_MEM],
 
     output logic [ADDR_WIDTH-1:0] read_addr_out,
-    output logic signed [DATA_WIDTH-1:0] data_out
+    output logic  [DATA_WIDTH-1:0] data_out
 );
 
     logic mem_sel_in;

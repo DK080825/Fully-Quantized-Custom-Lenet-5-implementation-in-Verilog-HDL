@@ -10,9 +10,9 @@ module BRAM_decoder
     input  logic        clk,
     input  logic        reset,
     input  logic [ADDR_WIDTH-1 :0]  read_addr_in,
-    input  logic signed [DATA_WIDTH-1:0] fm_data_in[NUM_MEM],
+    input  logic  [DATA_WIDTH-1:0] fm_data_in[NUM_MEM], // iact is unsinged
     output logic [ADDR_WIDTH-1:0]  read_addr_out,
-    output logic signed [DATA_WIDTH-1:0] data_out
+    output logic  [DATA_WIDTH-1:0] data_out
 );
 
     logic [3:0] mem_sel_pipe_1, mem_sel_pipe_2;
