@@ -237,7 +237,7 @@ Typical control/data signals include:
 
 ### Figure Placeholder H - SoC integration view
 
-![SOC_intergration](SOC_intergration/SOC_intergration.png)
+![SOC_intergration](images/SOC_intergration.png)
 
 <br><br><br><br><br><br>
 
