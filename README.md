@@ -1,7 +1,7 @@
 # Fully Quantized Custom LeNet-5 Implementation in Verilog HDL
 
 A detailed RTL implementation of an INT8-quantized LeNet-5 style accelerator, organized as reusable SystemVerilog/Verilog hardware modules for convolution, pooling, activation, and dense classification.
-
+### Video Demos: https://youtu.be/iHpeTRM6k9U](https://youtu.be/g2tYO0fw6e4?si=Lm1-rYTDfhITySBh
 ---
 
 ## Project Information
@@ -84,11 +84,6 @@ After preparing the hardware, I established the following connections:
 - All devices must be on the same **LAN/WiFi network** for proper communication.
 - The **microSD card** is used to boot the Linux operating system on the KV260.
 
- ---
-##3. Video Demos
-
-- **Demo Video 1:** [https://youtu.be/iHpeTRM6k9U](https://youtu.be/iHpeTRM6k9U)
-- **Demo Video 2:** [Insert second demo link here](https://example.com)
 
 ---
 
