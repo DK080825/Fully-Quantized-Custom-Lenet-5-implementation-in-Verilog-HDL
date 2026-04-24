@@ -25,6 +25,11 @@ The design is decomposed into clear functional blocks and wrappers, making it su
 
 Unlike software inference where all operations are sequentially executed on a CPU/GPU, this implementation expresses each stage as dedicated hardware dataflow modules with cycle-level control.
 
+### Video Demos
+
+- **Demo Video 1:** [https://youtu.be/iHpeTRM6k9U](https://youtu.be/iHpeTRM6k9U)
+- **Demo Video 2:** [Insert second demo link here](https://example.com)
+
 ---
 
 ## 2. High-Level Model Architecture
@@ -219,6 +224,33 @@ The implementation includes the following key module groups:
 
 ## 9. Quantization and Numeric Notes
 
+This project uses **PTQ (Post-Training Quantization)** as the quantization methodology for deployment.
+
+### 9.1 What is PTQ?
+
+**PTQ** converts a pre-trained floating-point model (typically FP32) into a lower-precision model (INT8 in this project) **after training is complete**, without re-training the full network.  
+In practice, PTQ uses calibration data to estimate activation ranges and derive quantization parameters (e.g., scale and zero-point), then maps float tensors to integer tensors for efficient hardware inference.
+
+### 9.2 Why PTQ is used in this project
+
+- It allows a faster path from trained model to RTL deployment.
+- It matches the hardware goal of efficient INT8 arithmetic.
+- It avoids the full cost and complexity of quantization-aware retraining.
+
+### 9.3 PTQ advantages
+
+- **Fast deployment:** no full retraining loop is required.
+- **Lower engineering cost:** simpler workflow than QAT for many projects.
+- **Good hardware compatibility:** naturally aligns with INT8 MAC-based accelerators.
+- **Portable flow:** can be applied to many trained checkpoints with calibration.
+
+### 9.4 PTQ limitations
+
+- **Potential accuracy drop:** especially for sensitive layers or low-bit settings.
+- **Calibration sensitivity:** quality depends on representative calibration data.
+- **Less robust than QAT:** difficult distributions may quantize poorly without retraining.
+- **Per-layer tuning overhead:** some models still need manual tuning of clipping/scales.
+
 - Input/weight/activation datapath primarily targets signed INT8 representation.
 - Internal accumulators use extended precision to reduce overflow risk.
 - Final stage outputs may be normalized, rounded, shifted, and saturated based on module policy.
@@ -261,10 +293,13 @@ Recommended checks:
 
 ## 12. Future Improvements
 
-- Add automated regression testbench and golden-check scripts.
-- Provide per-layer latency and throughput reports.
-- Add parameterized support for configurable image/filter sizes.
-- Improve documentation with timing diagrams and synthesis statistics.
+- Introduce energy-aware dataflow mapping (e.g., **Row-Stationary (RS) dataflow**) to minimize data movement between memory hierarchy levels and reduce overall processing energy.
+- Re-architect memory scheduling with local reuse buffers (weights, activations, partial sums) to further reduce off-chip/on-chip transfer cost.
+- Add automated regression testbench and golden-check scripts for fast functional verification after every RTL update.
+- Provide per-layer latency, throughput, and energy-per-inference reports to guide design-space exploration.
+- Add parameterized support for configurable image size, channel count, kernel size, and parallelism factors.
+- Explore mixed-precision or adaptive quantization (INT8/INT6/INT4 in selected stages) for better efficiency-accuracy trade-offs.
+- Improve documentation with timing diagrams, synthesis statistics, and resource breakdown (LUT/FF/BRAM/DSP).
 
 ---
 
