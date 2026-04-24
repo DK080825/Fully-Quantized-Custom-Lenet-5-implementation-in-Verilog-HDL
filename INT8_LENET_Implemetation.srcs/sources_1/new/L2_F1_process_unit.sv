@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Layer-2 convolution processing unit for filter 1. It consumes Layer-1 feature streams, performs quantized INT8 convolution MAC operations across scheduled cycles, manages accumulation boundaries/reset events, and outputs filter activations for pooling and classifier stages.
+
 `timescale 1ns / 1ps
 
 module L2_F1_process_unit #(

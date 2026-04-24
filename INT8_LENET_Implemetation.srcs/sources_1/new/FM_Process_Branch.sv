@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Feature-map processing branch module. It handles branch-local data sequencing and intermediate operations after convolution, then provides structured outputs for merge or downstream consumption.
+
 module FM_Process_Branch #(
     parameter DATA_WIDTH = 8,
     parameter ADDR_WIDTH = 10,

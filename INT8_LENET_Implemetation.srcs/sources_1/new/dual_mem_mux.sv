@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Dual-memory multiplexer. It selects between two memory data sources according to control state, enabling flexible switching between feature buffers, parameter stores, or alternate processing paths.
+
 `timescale 1ns/1ps
 
 module dual_mem_mux

@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: 2x2 max-pooling module. It evaluates local 2x2 activation windows, selects maxima for spatial downsampling, and preserves dominant features while reducing data size.
+
 `timescale 1ns / 1ps
 
 module Maxpooling2x2_Relu #(

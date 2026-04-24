@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Top wrapper for integrated max-pooling and ReLU processing. It combines control/data interfaces of both operations into one reusable stage-level hardware block.
+
 `timescale 1ns / 1ps
 
 module MaxPooling_Relu_top #(

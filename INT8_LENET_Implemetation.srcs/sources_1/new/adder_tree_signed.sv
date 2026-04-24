@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Signed adder-tree reduction module. It combines multiple signed partial products through a balanced tree structure to reduce critical-path delay and provide efficient summation for convolution or dense computations.
+
 `timescale 1ns / 1ps
 module adder_tree_signed #(
     parameter int N     = 6,

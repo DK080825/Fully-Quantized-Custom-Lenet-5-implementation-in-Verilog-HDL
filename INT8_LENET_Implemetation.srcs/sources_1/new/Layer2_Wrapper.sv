@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Layer-2 wrapper for second-stage convolution. It schedules multiple filter units, aligns memory reads with compute windows, aggregates per-filter outputs, and delivers timing-consistent feature streams to downstream pooling and dense logic.
+
 module Layer2_Wrapper
 #(
     parameter DATA_WIDTH = 8,

@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Streaming max-pooling plus ReLU module. It applies activation and downsampling in a continuous data path, producing bandwidth-efficient feature streams for later network stages.
+
 `timescale 1ns / 1ps
 
 module MaxPooling_Relu_stream #(

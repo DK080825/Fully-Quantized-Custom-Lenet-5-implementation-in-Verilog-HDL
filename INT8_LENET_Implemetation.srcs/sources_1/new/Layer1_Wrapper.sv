@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Layer-1 wrapper that organizes first-stage feature extraction. It controls input memory/bank access, dispatches windows to multiple convolution branches, aligns branch outputs, and forwards synchronized feature maps to pooling/ReLU and later stages.
+
 `timescale 1ns / 1ps
 
 module Layer1_Wrapper #(

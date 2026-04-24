@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Layer-1 convolution processing unit for filter 4, sub-branch 1. It receives sliding-window feature data and kernel coefficients, executes INT8 multiply-accumulate cycles with controlled partial-sum updates, and emits branch-local results synchronized to pipeline valid/control timing.
+
 `timescale 1ns / 1ps
 
 module L1_F4_1_process_unit #(

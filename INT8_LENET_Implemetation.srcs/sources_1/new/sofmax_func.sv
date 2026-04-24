@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Softmax function/approximation module. It transforms logits into normalized probability-like outputs using hardware-oriented arithmetic/lookup strategies suitable for FPGA inference.
+
 `timescale 1ns / 1ps
 
 module sofmax_func #(

@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: M10K memory wrapper/definition for FPGA embedded RAM resources. It provides reusable on-chip storage interfaces for model parameters and intermediate feature maps with low-latency access.
+
 `timescale 1ns / 1ps
 module M10K#(
     parameter ITE_NUM = 100,

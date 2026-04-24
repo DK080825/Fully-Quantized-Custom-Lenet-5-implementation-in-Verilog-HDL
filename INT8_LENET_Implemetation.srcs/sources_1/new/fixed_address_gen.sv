@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Fixed-pattern address generator. It produces deterministic sequential/tiled memory addresses for convolution/pooling traversal and keeps memory access aligned with pipeline cycle timing.
+
 module read_address_gen #(
 	parameter ARRAY_HEIGHT=10,
 	parameter PARTITION_SIZE=5,

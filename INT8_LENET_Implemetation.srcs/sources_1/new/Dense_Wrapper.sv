@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Dense-layer wrapper that manages classifier dataflow. It arranges flattened features, controls weight/bias read sequencing, orchestrates MAC accumulation over neurons, and outputs logits/class scores for decision logic.
+
 `timescale 1ns / 1ps
 
 module Dense_Wrapper#(

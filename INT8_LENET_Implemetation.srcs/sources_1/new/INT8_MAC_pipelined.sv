@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Pipelined INT8 multiply-accumulate core for high-throughput inference. It performs signed 8-bit multiplications, staged accumulations, and registered output generation to improve timing closure on FPGA.
+
 `timescale 1ns/1ps
 
 module INT8_MAC_pipelined #(

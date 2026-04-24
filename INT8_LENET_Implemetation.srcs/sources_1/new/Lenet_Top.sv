@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Top-level INT8 LeNet integration module. It connects all major compute stages (Layer-1, Layer-2, pooling/activation, and dense classification), distributes global control/reset signals, and coordinates end-to-end inference handshakes and dataflow timing.
+
 `timescale 1ns / 1ps
 
 module Lenet_Top #(

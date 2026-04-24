@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Input-bank control module. It manages bank selection, read/write enables, and address progression so input/feature data can stream continuously into compute units without pipeline stalls.
+
 module input_bank_ctrl #(
     parameter ADDR_WIDTH = 10,
     parameter INPUT_WIDTH = 28,

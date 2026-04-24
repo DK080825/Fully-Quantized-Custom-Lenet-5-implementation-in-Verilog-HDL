@@ -1,0 +1,56 @@
+# INT8 LeNet 文件简述
+
+- Author: Do Khanh
+- School: UIT
+
+## Files
+
+- `adder_tree_signed.sv`: 有符号加法树模块，用于多路乘加结果求和。
+- `BRAM_decoder.sv`: BRAM 地址/片选解码逻辑。
+- `Dense_Wrapper.sv`: 全连接层封装模块，管理输入、权重与输出流程。
+- `dual_mem_mux.sv`: 双存储体数据多路复用模块。
+- `fixed_address_gen.sv`: 固定模式地址生成器，用于顺序访问存储数据。
+- `FM_Process_Branch.sv`: 特征图处理分支模块，组织卷积后数据路径。
+- `input_bank_ctrl.sv`: 输入数据 bank 控制逻辑。
+- `INT8_MAC_pipelined.sv`: INT8 流水化 MAC（乘加）核心单元。
+- `L1_F0_0_process_unit.sv`: 第一层第 0 个卷积核分支处理单元（子单元 0）。
+- `L1_F0_1_process_unit.sv`: 第一层第 0 个卷积核分支处理单元（子单元 1）。
+- `L1_F1_0_process_unit.sv`: 第一层第 1 个卷积核分支处理单元（子单元 0）。
+- `L1_F1_1_process_unit.sv`: 第一层第 1 个卷积核分支处理单元（子单元 1）。
+- `L1_F2_0_process_unit.sv`: 第一层第 2 个卷积核分支处理单元（子单元 0）。
+- `L1_F2_1_process_unit.sv`: 第一层第 2 个卷积核分支处理单元（子单元 1）。
+- `L1_F3_0_process_unit.sv`: 第一层第 3 个卷积核分支处理单元（子单元 0）。
+- `L1_F3_1_process_unit.sv`: 第一层第 3 个卷积核分支处理单元（子单元 1）。
+- `L1_F4_0_process_unit.sv`: 第一层第 4 个卷积核分支处理单元（子单元 0）。
+- `L1_F4_1_process_unit.sv`: 第一层第 4 个卷积核分支处理单元（子单元 1）。
+- `L1_F5_0_process_unit.sv`: 第一层第 5 个卷积核分支处理单元（子单元 0）。
+- `L1_F5_1_process_unit.sv`: 第一层第 5 个卷积核分支处理单元（子单元 1）。
+- `L2_F0_process_unit.sv`: 第二层第 0 个卷积核处理单元。
+- `L2_F1_process_unit.sv`: 第二层第 1 个卷积核处理单元。
+- `L2_F2_process_unit.sv`: 第二层第 2 个卷积核处理单元。
+- `L2_F3_process_unit.sv`: 第二层第 3 个卷积核处理单元。
+- `L2_F4_process_unit.sv`: 第二层第 4 个卷积核处理单元。
+- `L2_F5_process_unit.sv`: 第二层第 5 个卷积核处理单元。
+- `L2_F6_process_unit.sv`: 第二层第 6 个卷积核处理单元。
+- `L2_F7_process_unit.sv`: 第二层第 7 个卷积核处理单元。
+- `L2_F8_process_unit.sv`: 第二层第 8 个卷积核处理单元。
+- `L2_F9_process_unit.sv`: 第二层第 9 个卷积核处理单元。
+- `L2_F10_process_unit.sv`: 第二层第 10 个卷积核处理单元。
+- `L2_F11_process_unit.sv`: 第二层第 11 个卷积核处理单元。
+- `L2_F12_process_unit.sv`: 第二层第 12 个卷积核处理单元。
+- `L2_F13_process_unit.sv`: 第二层第 13 个卷积核处理单元。
+- `L2_F14_process_unit.sv`: 第二层第 14 个卷积核处理单元。
+- `L2_F15_process_unit.sv`: 第二层第 15 个卷积核处理单元。
+- `Layer1_Wrapper.sv`: 第一层卷积/池化整体封装与调度模块。
+- `Layer2_Wrapper.sv`: 第二层卷积/池化整体封装与调度模块。
+- `Lenet_Top.sv`: LeNet 顶层模块，连接所有子层与控制接口。
+- `lutrom_sync.sv`: 同步 LUT ROM 读取模块。
+- `M10K.v`: M10K 存储资源封装（FPGA 片上存储）。
+- `MAC_wrapper.sv`: MAC 核心封装与接口适配模块。
+- `Maxpolling2x2.sv`: 2x2 最大池化实现模块。
+- `MaxPooling_Relu_stream`: 流式 MaxPooling + ReLU 数据处理模块。
+- `Max_polling_Relu_top.sv`: MaxPooling 与 ReLU 组合顶层封装。
+- `mlp_top.sv`: 多层感知机（全连接分类头）顶层模块。
+- `myip.v`: 自定义 IP 顶层封装。
+- `myip_slave_full_v1_0_S00_AXI.v`: AXI4-Lite 从接口实现，用于寄存器访问与控制。
+- `sofmax_func.sv`: Softmax 相关计算/近似函数模块。

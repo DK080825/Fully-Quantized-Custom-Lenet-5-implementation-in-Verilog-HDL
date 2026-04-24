@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: BRAM decoder/control module. It maps address/control inputs to memory bank selections, drives proper enable paths, and routes data between on-chip storage and compute blocks.
+
 `timescale 1ns/1ps
 
 module BRAM_decoder

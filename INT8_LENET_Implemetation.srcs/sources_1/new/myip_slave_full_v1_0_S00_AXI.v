@@ -1,3 +1,6 @@
+// Author: Do Khanh
+// School: UIT
+// Description: AXI slave interface implementation. It decodes bus transactions, maps configuration/status registers, and bridges software-side control/monitoring to the hardware accelerator pipeline.
 
 `timescale 1 ns / 1 ps
     

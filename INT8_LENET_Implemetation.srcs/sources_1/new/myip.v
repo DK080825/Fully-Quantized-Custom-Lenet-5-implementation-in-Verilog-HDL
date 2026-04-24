@@ -1,3 +1,6 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Custom accelerator IP top wrapper. It packages the neural hardware core with external integration interfaces so the design can be instantiated as a reusable FPGA IP block.
 
 `timescale 1 ns / 1 ps
 

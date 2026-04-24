@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Top-level MLP classifier module. It integrates dense compute sub-blocks, manages intermediate accumulations and output formatting, and converts extracted CNN features into class-score vectors.
+
 `timescale 1ns / 1ps
 
 module mlp_top #(
@@ -322,4 +326,3 @@ INT8_MAC_pipelined #(
 );
 
 endmodule
-

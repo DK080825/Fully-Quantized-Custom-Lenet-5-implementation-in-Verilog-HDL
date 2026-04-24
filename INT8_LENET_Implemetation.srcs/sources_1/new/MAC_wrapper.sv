@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: MAC wrapper module that adapts external interfaces to the arithmetic core. It routes operands, applies enable/clear timing, synchronizes pipeline stages, and forwards computed results to upper-level modules.
+
 module MAC_wrapper #(
  parameter KERNEL_WIDTH = 3,
  parameter KERNEL_HEIGHT = 3,

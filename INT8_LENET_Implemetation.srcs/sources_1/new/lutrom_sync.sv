@@ -1,3 +1,7 @@
+// Author: Do Khanh
+// School: UIT
+// Description: Synchronous LUT-ROM module. It returns table-driven values with clocked latency, useful for constants or hardware-friendly function approximations that must align with pipeline timing.
+
 `timescale 1ns / 1ps
 module lutrom_sync #(
     parameter int WIDTH   = 48,
