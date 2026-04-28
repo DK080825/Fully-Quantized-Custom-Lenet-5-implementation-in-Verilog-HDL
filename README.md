@@ -1,7 +1,7 @@
 # Fully Quantized Custom LeNet-5 Implementation in Verilog HDL
 
 A detailed RTL implementation of an INT8-quantized LeNet-5 style accelerator, organized as reusable SystemVerilog/Verilog hardware modules for convolution, pooling, activation, and dense classification.
-### Video Demos: https://youtu.be/iHpeTRM6k9U](https://youtu.be/g2tYO0fw6e4?si=Lm1-rYTDfhITySBh
+### Video Demos: [https://youtu.be/iHpeTRM6k9U](https://youtu.be/g2tYO0fw6e4?si=Lm1-rYTDfhITySBh](https://www.youtube.com/watch?v=g2tYO0fw6e4)
 ---
 
 ## Project Information
