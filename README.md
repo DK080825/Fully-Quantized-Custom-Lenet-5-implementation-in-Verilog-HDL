@@ -253,7 +253,7 @@ The accelerator is exposed to the ARM CPU as a memory-mapped peripheral via the 
 | **Network** | Fully Connected | Custom LeNet-5 | Custom LeNet-5 |
 | **Precision** | 8-bit fixed-point | Q16.6 fixed-point | **INT8** |
 | **Accuracy** | 98.92% | 95.33% | **98.46%** |
-| **Inference Time** | 14.2 µs/image | 2.375 µs/image | 62.42 µs/image |
+| **Inference Time** | 14.2 µs/image | 2.375 µs/image | 30 µs/image |
 | **Frequency** | 172 MHz | 40 MHz | **200 MHz** |
 | **Performance** | 408.51 GOPS | 10.44 GOPS | 9.67 GOPS |
 | **Performance Density** | 3.37 GOPS/kLUT | 0.429 GOPS/kLUT | **0.624 GOPS/kLUT** |
