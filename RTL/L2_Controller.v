@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 // =============================================================================
-// Author      : Giau
+// Author      : Khanh
 // Title       : L2_Controller
 // Description : Layer-2 controller for the LeNet pipeline. It reads L1 pooled
 //               outputs, schedules the second convolution stage, and manages
