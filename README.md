@@ -28,7 +28,7 @@ The design is integrated as an **AXI4-Lite IP core** and communicates with the A
 ### 🎬 Video Demo: [Watch on YouTube](https://www.youtube.com/watch?v=g2tYO0fw6e4)
 ---
 ## 🖥️ Equipment Setup for Kria KV260 Development
-
+Credit: [AISEQLAB](https://github.com/AISeQLab/)
 ### A. Hardware Overview
 
 In this project, I set up a development environment to work with the Kria KV260 FPGA platform for building and running an embedded SoC system.
