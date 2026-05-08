@@ -16,7 +16,7 @@
 
 ## 📌 Overview
 
-This project presents a **fully custom RTL hardware accelerator** for LeNet-5 CNN inference, designed in Verilog/SystemVerilog and deployed on a **Zynq UltraScale+ SoC (Kria KV260)**. The accelerator performs **INT8 quantized inference** on 28×28 MNIST grayscale images, classifying handwritten digits (0–9) with **98.46% accuracy** at an average latency of **~30 µs/image**.
+This project presents a **fully custom RTL hardware accelerator** for LeNet-5 CNN inference, designed in Verilog and deployed on a **Zynq UltraScale+ SoC (Kria KV260)**. The accelerator performs **INT8 quantized inference** on 28×28 MNIST grayscale images, classifying handwritten digits (0–9) with **98.46% accuracy** at an average latency of **~30 µs/image**.
 
 The design is integrated as an **AXI4-Lite IP core** and communicates with the ARM Cortex-A53 processor via memory-mapped registers.
 
