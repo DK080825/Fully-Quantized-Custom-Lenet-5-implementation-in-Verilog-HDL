@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 // =============================================================================
-// Author      : Giau
+// Author      : Khanh
 // Title       : Lenet_Top_v2
 // Description : Top-level controller for the LeNet pipeline using the shared
 //               processing engine and ping-pong local memory scheduling.
