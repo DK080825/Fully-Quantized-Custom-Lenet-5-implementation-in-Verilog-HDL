@@ -20,7 +20,7 @@ This project presents a **fully custom RTL hardware accelerator** for LeNet-5 CN
 
 The design is integrated as an **AXI4-Lite IP core** and communicates with the ARM Cortex-A53 processor via memory-mapped registers.
 
-> **Authors:** Trần Quang Giàu (23520412) & Đỗ Quốc Khánh (23520715)  
+> **Authors:** Đỗ Quốc Khánh (23520715)  
 > **Supervisor:** TS. Trần Thị Điểm  
 > **Institution:** University of Information Technology (UIT) — Faculty of Computer Engineering
 
@@ -76,7 +76,7 @@ After preparing the hardware, the following connections were established:
 
 ### Overall IP Architecture
 
-<!-- INSERT IMAGE: Overall LeNet-5 TOP IP block diagram here -->
+![LeNet-5 TOP IP Architecture](images/top_ip_architecture.png)
 > _Figure: LeNet-5 TOP IP — L1 Controller, L2 Controller, FC Controller, Shared Compute Engine, Ping-Pong Buffers, Softmax Module_
 
 ### Custom LeNet-5 Network (Hardware-Deployed)
@@ -114,6 +114,7 @@ Input Image       Layer 1                    Layer 2                    FC
 │   └── myip.v                   # Top-level SoC IP wrapper
 ├── mem/
 │   └── index_7.mem              # Sample weight/parameter memory file
+├── images/                      # All figures referenced in this README
 ├── docs/
 │   └── Báo_cáo_đồ_án_SoC_pptx.pdf  # Full project presentation (Vietnamese)
 └── README.md
@@ -138,7 +139,7 @@ Stage 6: Add Zo + saturate → INT8 output
 
 **Key insight:** The INT32 accumulator prevents overflow for up to 576 MACs (Conv 3×3 × 64 channels), while fixed-point `M0 >> shift` avoids costly floating-point division at run time.
 
-<!-- INSERT IMAGE: MAC unit 6-stage pipeline diagram here -->
+![MAC Unit 6-stage Pipeline](images/mac_pipeline.png)
 
 ---
 
@@ -151,7 +152,7 @@ A **reused processing fabric** containing **16 parallel MAC lanes**, each follow
 - Per-lane `pool_bypass` signal disables pooling for the FC layer
 - `lane_active_mask` dynamically disables unused lanes (e.g., only 6 active for L1, 10 for FC)
 
-<!-- INSERT IMAGE: Compute Engine with 16 processing lanes diagram here -->
+![Compute Engine with 16 Processing Lanes](images/compute_engine.png)
 
 ---
 
@@ -163,9 +164,11 @@ A **reused processing fabric** containing **16 parallel MAC lanes**, each follow
 | `L2_Controller.v` | Schedules 6-channel accumulation for Conv2 | 4× M10K weight banks | 16 of 16 |
 | `FC_Controller.sv` | Streams 400→10 dot products | 5× M10K weight banks | 10 of 16 |
 
-<!-- INSERT IMAGE: L1 Controller block diagram here -->
-<!-- INSERT IMAGE: L2 Controller block diagram here -->
-<!-- INSERT IMAGE: FC Controller block diagram here -->
+![L1 Controller Block Diagram](images/l1_controller.png)
+
+![L2 Controller Block Diagram](images/l2_controller.png)
+
+![FC Controller Block Diagram](images/fc_controller.png)
 
 ---
 
@@ -178,7 +181,9 @@ A **streaming 2×2 max-pool** with inline ReLU implemented using a line-buffer a
 - On every two rows, the final 2×2 max is computed and ReLU applied
 - `pool_bypass = 1` shorts the datapath for FC-layer operation (no spatial pooling needed)
 
-<!-- INSERT IMAGE: MaxPooling streaming architecture diagram here -->
+![MaxPooling Streaming Idea](images/maxpooling_idea.png)
+
+![MaxPooling RTL Architecture](images/maxpooling_arch.png)
 
 ---
 
@@ -195,9 +200,11 @@ The accelerator is exposed to the ARM CPU as a memory-mapped peripheral via the 
 | `0x10` | `RESULT` | R | Classification output (4-bit, 0–9) |
 | `0x14` | `DONE` | R | Inference-complete flag |
 
-<!-- INSERT IMAGE: AXI Wrapper Memory Map diagram here -->
-<!-- INSERT IMAGE: AXI4-Lite write timing diagram here -->
-<!-- INSERT IMAGE: AXI4-Lite read timing diagram here -->
+![AXI Wrapper Memory Map](images/axi_memory_map.png)
+
+![AXI4-Lite Write Timing Diagram](images/axi_write_timing.png)
+
+![AXI4-Lite Read Timing Diagram](images/axi_read_timing.png)
 
 ---
 
@@ -229,9 +236,11 @@ The accelerator is exposed to the ARM CPU as a memory-mapped peripheral via the 
 | **Measured Accuracy (10K images)** | **98.46%** (9,846 / 10,000) |
 | **Average Inference Time** | **62.42 µs/image** |
 
-<!-- INSERT IMAGE: Vivado resource utilization screenshot here -->
-<!-- INSERT IMAGE: Timing analysis summary screenshot here -->
-<!-- INSERT IMAGE: Power analysis on-chip breakdown here -->
+![Resource Utilization](images/resource_utilization.png)
+
+![Timing Analysis Summary](images/timing_analysis.png)
+
+![Power Analysis On-Chip Breakdown](images/power_analysis.png)
 
 ---
 
@@ -289,14 +298,14 @@ launch_runs impl_1 -to_step write_bitstream -jobs 8
 ### 3. Create the AXI IP and Block Design
 
 1. Package `myip.v` (with `AXI4_Wrapper.v`) as a Vivado IP
-2. Create a Block Design:  
-   - Add **Zynq UltraScale+ MPSoC**  
-   - Add **myip_v2_0**  
-   - Connect via **AXI SmartConnect**  
+2. Create a Block Design:
+   - Add **Zynq UltraScale+ MPSoC**
+   - Add **myip_v2_0**
+   - Connect via **AXI SmartConnect**
    - Add **Processor System Reset**
 3. Validate, generate bitstream, and export hardware
 
-<!-- INSERT IMAGE: Vivado block design screenshot here -->
+![Vivado Block Design](images/vivado_block_design.png)
 
 ### 4. Build Software (Vitis / Linux)
 
@@ -332,7 +341,7 @@ A self-checking testbench streams 1,000 MNIST test images through the RTL model 
 vsim -do sim/run_sim.tcl
 ```
 
-<!-- INSERT IMAGE: ModelSim waveform showing start→done assertion and correct classification output -->
+![Simulation Waveform](images/simulation_waveform.png)
 
 **Simulation results:**
 - Inference latency: **6,320 clock cycles** (start → done)
@@ -381,7 +390,7 @@ Convolution loops are unrolled along the **channel dimension** (`CHANNEL_PAR = 6
 
 ### 🏓 Ping-Pong Buffering
 Output feature maps are written to a **double-buffered local memory**:
-- L1 writes → Bank 0; L2 reads Bank 0, writes Bank 1; FC reads Bank 1  
+- L1 writes → Bank 0; L2 reads Bank 0, writes Bank 1; FC reads Bank 1
 - Enables overlap of computation and data readout between layers
 
 ---
@@ -402,19 +411,6 @@ Output feature maps are written to a **double-buffered local memory**:
 - [ ] Tiling + banked memory for larger networks (ResNet, MobileNet)
 
 ---
-
-## 👥 Team
-
-| Name | Student ID | Contributions |
-|---|---|---|
-| **Trần Quang Giàu** | 23520412 | Model training, Compute_Engine, L1/L2/FC_Controller, Lenet_Top, simulation & synthesis |
-| **Đỗ Quốc Khánh** | 23520715 | MAC unit, MaxPooling, Softmax, AXI4 SoC integration, software driver, benchmarking |
-
-**Supervisor:** TS. Trần Thị Điểm  
-**University:** Trường Đại học Công nghệ Thông tin — Khoa Kỹ thuật Máy tính
-
----
-
 ## 📜 License
 
 This project is released under the [MIT License](LICENSE).
