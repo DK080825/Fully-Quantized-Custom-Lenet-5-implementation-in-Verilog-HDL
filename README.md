@@ -25,7 +25,8 @@ The design is integrated as an **AXI4-Lite IP core** and communicates with the A
 > **Institution:** University of Information Technology (UIT) — Faculty of Computer Engineering
 
 ---
-
+### 🎬 Video Demo: [Watch on YouTube](https://www.youtube.com/watch?v=g2tYO0fw6e4)
+---
 ## 🖥️ Equipment Setup for Kria KV260 Development
 
 ### A. Hardware Overview
