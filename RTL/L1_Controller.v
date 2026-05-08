@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 // =============================================================================
-// Author      : Giau
+// Author      : Khanh
 // Title       : L1_Controller
 // Description : Layer-1 controller for the LeNet pipeline. It streams 3x3
 //               windows from the input banks, aligns memory latency, and
