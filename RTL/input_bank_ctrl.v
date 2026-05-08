@@ -1,5 +1,5 @@
 // =============================================================================
-// Author      : Giau
+// Author      : Khanh
 // Title       : input_bank_ctrl
 // Description : Decodes MNIST-style write addresses into overlapping ping-pong
 //               input-bank write enables and addresses.
