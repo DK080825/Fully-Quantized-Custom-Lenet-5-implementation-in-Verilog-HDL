@@ -10,9 +10,6 @@
 //
 // - pool_bypass = 0:
 //     normal 2×2 stride-2 max-pooling with Zo floor
-//
-// This version keeps the SAME interface as before, so it is compatible with
-// the current Shared_Engine.
 // =============================================================================
 module MaxPool_Configurable #(
     parameter DATA_WIDTH    = 8,
